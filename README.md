@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+Current
+lib/
+├─ db/
+│  ├─ index.ts           # Drizzle connection
+│  └─ schema.ts          # Table definitions (Leads, Campaigns)
+├─ auth/
+│  ├─ betterAuth.ts      # Better Auth setup
+│  └─ middleware.ts      # Protected route middleware
+services/
+├─ leadsService.ts       # CRUD operations for leads
+├─ campaignsService.ts   # CRUD operations for campaigns
+pages/api/ (optional legacy) OR app/api/
+├─ leads/
+│  └─ route.ts           # Handles HTTP methods
+├─ campaigns/
+│  └─ route.ts
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+
+
+# API Routes & Controllers Overview
+
+This document describes the API routes and their corresponding controllers for the Kandid Full Stack Assignment (Next.js App Router).
+
+---
+
+## 1. Authentication Routes
+
+Using **Better Auth**, most routes are handled automatically, but you will need:
+
+- `/api/auth/[...betterauth]/route.ts` → Main Better Auth handler
+- `/api/auth/register` → Custom registration (manual email/password signup)
+- **(Optional)** `/api/auth/logout` → To handle custom logout if needed
+
+### Controllers
+No separate controllers needed; Better Auth handles the logic.
+
+---
+
+## 2. Campaigns Routes
+
+- `/api/campaigns`
+  - `GET` → List all campaigns (with filters & sorting)
+  - `POST` → Create new campaign
+
+- `/api/campaigns/[id]`
+  - `GET` → Get a single campaign
+  - `PATCH` → Update campaign (name, status, etc.)
+  - `DELETE` → Delete campaign
+
+### Controllers (`/lib/services/campaignService.ts`)
+- `getCampaigns()`
+- `getCampaignById()`
+- `createCampaign()`
+- `updateCampaign()`
+- `deleteCampaign()`
+
+---
+
+## 3. Leads Routes
+
+- `/api/leads`
+  - `GET` → List all leads (with infinite scroll, filters, search)
+  - `POST` → Create new lead
+
+- `/api/leads/[id]`
+  - `GET` → Lead details (for side sheet)
+  - `PATCH` → Update status (Pending → Contacted → Responded → Converted)
+  - `DELETE` → Delete lead
+
+### Controllers (`/lib/services/leadService.ts`)
+- `getLeads()`
+- `getLeadById()`
+- `createLead()`
+- `updateLead()`
+- `deleteLead()`
+
+---
+
+## 4. Optional: Settings or User Profile
+
+- `/api/user` → Fetch current user
+- `/api/user/update` → Update profile
+
+---
+
+## Total API Routes (Backend)
+
+- **Authentication**: ~2–3 routes (Better Auth + register)
+- **Campaigns**: 2 main routes (`/campaigns`, `/campaigns/[id]`)
+- **Leads**: 2 main routes (`/leads`, `/leads/[id]`)
+- **(Optional)** User routes: 1–2
+
+**Total: ~6–7 routes (all in `/app/api/`).**
+
+---
+
+## Controller Layer Best Practices
+
+Next.js App Router does not enforce a strict controller structure like Express.
+
+- Keep routes in `/app/api/.../route.ts` (handle `GET`, `POST`, `PATCH`, `DELETE`).
+- Place reusable logic in `/lib/services/`.
+
+Example:
+```
+src/
+  lib/
+    services/
+      campaignService.ts
+      leadService.ts
+      authService.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

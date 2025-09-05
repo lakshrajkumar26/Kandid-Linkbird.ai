@@ -1,0 +1,1 @@
+ALTER TABLE "account" DROP CONSTRAINT "account_provider_provider_account_id_pk";

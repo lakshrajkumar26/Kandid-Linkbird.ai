@@ -1,20 +1,11 @@
 import { db } from "@/lib/db";
 import { campaigns } from "@/lib/db/schema";
 import { NextRequest, NextResponse } from "next/server";
-// import { getAllCampaigns, createCampaign } from "../../../services/campaignsService";
 
-// export async function GET() {
-//   const campaigns = await getAllCampaigns();
-//   return NextResponse.json(campaigns);
-// }
+//For GET and POST
+// and inside the [id] for PATCH and DELETE 
 
-// export async function POST(req: NextRequest) {
-//   const body = await req.json();
-//   const newCampaign = await createCampaign(body);
-//   return NextResponse.json(newCampaign);
-// }
-
- 
+//@GET
 export async function GET () {
   try{
   const allCampaigns = await  db.select().from(campaigns);
@@ -27,10 +18,15 @@ export async function GET () {
 
 }
 
+
+//@POST
 export async function POST (req: NextRequest) {
   try{
-    const body = await req.json(); // ==========>  for body 
-       const newCampaign = await db.insert(campaigns).values(body).returning();
+    const data  = await req.json(); // ==========>  for body 
+       const newCampaign = await db.insert(campaigns).values({
+        name :data.name,
+        status :data.status ||"Draft",
+  }).returning();
        return NextResponse.json({message: "new Campaign created",data : newCampaign},{status : 201})
   }
   catch(err){
@@ -38,3 +34,4 @@ export async function POST (req: NextRequest) {
     return NextResponse.json({message : "error in creating campaign",error :err},{status:500});
   }
 }
+

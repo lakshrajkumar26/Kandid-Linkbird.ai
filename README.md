@@ -17,6 +17,28 @@ pages/api/ (optional legacy) OR app/api/
 │  └─ route.ts
 
 
+High-level plan (what to implement next) 
+
+Better Auth: sign-up/sign-in page + Google OAuth + server auth adapter (Drizzle/PG) + logout + protected route middleware.
+
+DB (Drizzle + Postgres): create campaigns and leads schemas + migration. Add useful indices.
+
+State: Zustand store for sidebar collapse, selected lead/campaign, filters & UI state.
+
+Data fetching: TanStack Query (React Query) for campaigns & leads; use useInfiniteQuery for leads.
+
+UI components: Lead table (infinite scrolling), lead detail side-sheet (shadcn Sheet/Dialog), Campaigns table, search/filters, skeletons & loading states.
+
+Protected routes: Next.js middleware + server session checks.
+
+Polish: accessible keyboard handlers (Esc to close side-sheet), performance hooks, add sorting/filtering and optimistic updates.
+
+
+
+
+
+
+
 
 
 

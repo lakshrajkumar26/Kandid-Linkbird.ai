@@ -28,58 +28,6 @@ export const leads = pgTable("leads", {
   last_contacted: timestamp("last_contacted").defaultNow(),
 });
 
-/* -------------------------------
-   BetterAuth Tables
---------------------------------*/
-// export const user  = pgTable("user", {
-//   id: text("id").primaryKey(),
-//   email: text("email").notNull().unique(),
-//   password: text("password"), // used for email/password login
-//   name: text("name"),
-//   emailVerified: boolean("email_verified").default(false).notNull(),
-//   createdAt: timestamp("created_at").defaultNow().notNull(),
-//   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-// });
-
-// export const account = pgTable("account", {
-//   id: text("id").primaryKey(),
-//   userId: text("user_id")
-//     .notNull()
-//     .references(() => user.id, { onDelete: "cascade" }),
-//   accountId: text("account_id").notNull(),
-//   providerId: text("provider_id").notNull(),
-//   provider: text("provider").default("credential").notNull(),
-//   type: text("type").default("credential").notNull(),
-//   accessToken: text("access_token"),
-//   refreshToken: text("refresh_token"),
-//   password: text("password"),
-//   expiresAt: integer("expires_at"),
-//   createdAt: timestamp("created_at").defaultNow().notNull(),
-//   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-// });
-
-
-// export const session = pgTable("session", {
-//   sessionToken: text("session_token").primaryKey().notNull(),
-//   userId: text("user_id")
-//     .notNull()
-//     .references(() => user .id, { onDelete: "cascade" }),
-//   expires: timestamp("expires").notNull(),
-// });
-
-// export const verificationTokens = pgTable(
-//   "verification_tokens",
-//   {
-//     identifier: text("identifier").notNull(),
-//     token: text("token").notNull(),
-//     expires: timestamp("expires").notNull(),
-//   },
-//   (table) => ({
-//     pk: primaryKey({ columns: [table.identifier, table.token] }),
-//   })
-// );
-
-//  ----------- From  npx @better-auth/cli generate -----------------
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),

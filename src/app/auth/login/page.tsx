@@ -22,12 +22,12 @@ export default function LoginPage() {
       });
 
       if (error) {
-        console.error("Login failed:", error);
+        console.log("Login failed:", error);
       } else {
         router.push("/dashboard");
       }
     } catch (err) {
-      console.error("Unexpected error:", err);
+      console.log("Unexpected error:", err);
     }
   }
 

@@ -102,8 +102,8 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 space-y-6 overflow-auto">
-        <h1 className="text-2xl font-semibold">{activeTab}</h1>
+      <main className="flex-1 p-6 space-y-6 overflow-auto ">
+        <h1 className="text-2xl font-semibold ">{activeTab}</h1>
 
         {activeTab === "Dashboard" && <DashboardTab />}
         {activeTab === "Leads" && <LeadsTab />}

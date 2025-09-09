@@ -169,6 +169,20 @@
       "when": 1757063339367,
       "tag": "0023_fantastic_drax",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1757394614370,
+      "tag": "0024_parched_junta",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1757396081822,
+      "tag": "0025_remarkable_gertrude_yorkes",
+      "breakpoints": true
     }
   ]
 }

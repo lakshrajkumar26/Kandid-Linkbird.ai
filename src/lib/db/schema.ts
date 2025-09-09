@@ -15,7 +15,9 @@ export const campaigns = pgTable("campaigns", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   status: text("status").default("Draft"),
+   activity  : integer("activity").default(1),
   created_at: timestamp("created_at").defaultNow(),
+ 
 });
 
 export const leads = pgTable("leads", {
@@ -26,14 +28,16 @@ export const leads = pgTable("leads", {
   campaign_id: integer("campaign_id").references(() => campaigns.id),
   status: text("status").default("Pending"),
   last_contacted: timestamp("last_contacted").defaultNow(),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at").defaultNow(), 
 });
 
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  firstName : text("firstname"), //check later
-  lastName : text("lastname"), //check later
+  // firstName : text("firstname"), //check later
+  // lastName : text("lastname"), //check later
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),

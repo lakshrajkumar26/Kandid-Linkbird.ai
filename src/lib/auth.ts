@@ -21,5 +21,13 @@ export const auth = betterAuth({
     },
   },
 
+ adapter: {
+    user: {
+      extend: {
+        firstname: { type: "string", required: false },
+        lastname: { type: "string", required: false },
+      },
+    },
+  },
   trustedOrigins: [process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"],
 });

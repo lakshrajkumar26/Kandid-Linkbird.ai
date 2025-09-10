@@ -20,17 +20,65 @@ export const campaigns = pgTable("campaigns", {
  
 });
 
+// export const leads = pgTable("leads", {
+//   id: serial("id").primaryKey(),
+//   name: text("name").notNull(),
+//   email: text("email"),
+//   company: text("company"),
+//   campaign_id: integer("campaign_id").references(() => campaigns.id),
+//   status: text("status").default("Pending"),
+//   last_contacted: timestamp("last_contacted").defaultNow(),
+//   created_at: timestamp("created_at").defaultNow(),
+//   updated_at: timestamp("updated_at").defaultNow(), 
+// });
+
+
+
+//new Leads 
 export const leads = pgTable("leads", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email"),
   company: text("company"),
-  campaign_id: integer("campaign_id").references(() => campaigns.id),
-  status: text("status").default("Pending"),
-  last_contacted: timestamp("last_contacted").defaultNow(),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(), 
+
+  // relation: which campaign this lead belongs to
+  campaignId: integer("campaign_id")
+    .notNull()
+    .references(() => campaigns.id, { onDelete: "cascade" }),
+
+  // status of lead in the campaign
+  status: text("status").default("Pending").notNull(), 
+  // Could be "Pending", "Connected", "Messaged", "FollowUp1", "FollowUp2", "Replied", "DoNotContact"
+
+  lastContacted: timestamp("last_contacted"),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
+
+//Mow LeadMessages
+export const leadMessages = pgTable("lead_messages", {
+  id: serial("id").primaryKey(),
+
+  leadId: integer("lead_id")
+    .notNull()
+    .references(() => leads.id, { onDelete: "cascade" }),
+
+  type: text("type").notNull(),  
+  // e.g. "ConnectionRequest", "Message", "FollowUp1", "FollowUp2", "Reply"
+
+  content: text("content"), // message text you sent or reply from lead
+
+  direction: text("direction").default("outgoing").notNull(), 
+  // "outgoing" = you → lead
+  // "incoming" = lead → you
+
+  sentAt: timestamp("sent_at").defaultNow().notNull(),
+});
+
 
 
 export const user = pgTable("user", {

@@ -15,7 +15,7 @@ function serializeLead(lead: any) {
 }
 
 
- //without pagination 
+//  //without pagination 
 
 export async function GET(req :Request) {
 
@@ -31,18 +31,64 @@ export async function GET(req :Request) {
       email: leads.email,
       company: leads.company,
       status: leads.status,
-      last_contacted: leads.last_contacted,
+      last_contacted: leads.lastContacted,
       campaignId: campaigns.id,
       campaignName: campaigns.name,
       campaignStatus: campaigns.status,
       activity : campaigns.activity
     })
     .from(leads)
-    .innerJoin(campaigns, eq(leads.campaign_id, campaigns.id));
+    .innerJoin(campaigns, eq(leads.campaignId, campaigns.id));
 
   return NextResponse.json(allLeadsWithCampaign);
 }
 
+// ------------------------------------For Pagination ------------------------
+
+
+// export async function GET(req: NextRequest) {
+//   const url = new URL(req.url);
+//   const page = parseInt(url.searchParams.get("page") || "1", 10);
+//   const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+//   const offset = (page - 1) * limit;
+
+//   // Total count for pagination
+//   const totalRes = await db
+//     .select({ count: sql<number>`count(*)` })
+//     .from(leads);
+//   const total = Number(totalRes[0]?.count || 0);
+
+//   // Fetch leads with campaign info
+//   const allLeadsWithCampaign = await db
+//     .select({
+//       id: leads.id,
+//       name: leads.name,
+//       email: leads.email,
+//       company: leads.company,
+//       status: leads.status,
+//       last_contacted: leads.lastContacted,
+//       created_at: leads.createdAt,
+//       updated_at: leads.updatedAt,
+//       campaignId: campaigns.id,
+//       campaignName: campaigns.name,
+//       campaignStatus: campaigns.status,
+//       activity: campaigns.activity,
+//     })
+//     .from(leads)
+//     .innerJoin(campaigns, eq(leads.campaignId, campaigns.id))
+//     .limit(limit)
+//     .offset(offset);
+
+//   return NextResponse.json({
+//     data: allLeadsWithCampaign.map(serializeLead),
+//     pagination: {
+//       total,
+//       page,
+//       limit,
+//       totalPages: Math.ceil(total / limit),
+//     },
+//   });
+// }
 
 
 // # wiuth pagionation
@@ -85,23 +131,35 @@ export async function GET(req :Request) {
 // }
 
 
-export async function POST(req: NextRequest) {
-  const data = await req.json();
+// export async function POST(req: NextRequest) {
+//   const data = await req.json();
 
-  const created = await db
-    .insert(leads)
-    .values({
-      name: data.name,
-      email: data.email,
-      company: data.company,
-      campaign_id: data.campaign_id ? parseInt(data.campaign_id) : null,
-      status: data.status || "Pending Approval",
-    })
-    .returning();
+//   const created = await db
+//     .insert(leads)
+//     .values({
+//       name: data.name,
+//       email: data.email,
+//       company: data.company,
+//       campaign_id: data.campaign_id ? parseInt(data.campaign_id) : null,
+//       status: data.status || "Pending Approval",
+//     })
+//     .returning();
 
-  const safeCreated = created.map(serializeLead);
-  return NextResponse.json(safeCreated);
+//   const safeCreated = created.map(serializeLead);
+//   return NextResponse.json(safeCreated);
+// }
+
+
+
+
+export async function POST(req: Request) {
+  const body = await req.json();
+  const inserted = await db.insert(leads).values({
+    name: body.name,
+    email: body.email,
+    company: body.company,
+    campaignId: body.campaignId,
+    status: body.status ?? "Pending",
+  }).returning();
+  return NextResponse.json(inserted[0]);
 }
-
-
-

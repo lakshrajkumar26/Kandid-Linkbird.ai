@@ -8,6 +8,7 @@ import { Settings, Activity, ChevronLeft, ChevronRight } from "lucide-react";
 import { Logout } from "@/components/ui/logout";
 import { useAppStore } from "@/lib/store/useAppStore";
 import LeadsPage from "../leads/page";
+import CampaignsPage from "../campaigns/page";
 
 const TABS = ["Dashboard", "Leads", "Campaign", "Messages", "LinkedIn Accounts"];
 
@@ -164,13 +165,13 @@ function DashboardTab() {
 }
 
 function LeadsTab() {
-  return <Card><CardContent className="p-4">
+  return <Card>
     <LeadsPage/>
-    </CardContent></Card>;
+    </Card>;
 }
 
 function CampaignTab() {
-  return <Card><CardContent className="p-4">Campaign Management Section</CardContent></Card>;
+  return <Card>  <CampaignsPage/>  </Card>;
 }
 
 function MessagesTab() {

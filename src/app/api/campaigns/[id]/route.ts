@@ -6,9 +6,9 @@ import { eq } from "drizzle-orm";
 // GET single campaign + stats
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const campaignId = Number(params.id);
+  const campaignId = Number(context.params.id);
 
   // 1. Campaign info
   const campaign = await db.query.campaigns.findFirst({
@@ -58,7 +58,7 @@ export async function GET(
 // PATCH campaign
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   const data = await req.json();
 
@@ -68,7 +68,7 @@ export async function PATCH(
       name: data.name,
       status: data.status,
     })
-    .where(eq(campaigns.id, Number(params.id)))
+    .where(eq(campaigns.id, Number(context.params.id)))
     .returning();
 
   return NextResponse.json(updated[0] || null);
@@ -77,8 +77,8 @@ export async function PATCH(
 // DELETE campaign
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  await db.delete(campaigns).where(eq(campaigns.id, Number(params.id)));
+  await db.delete(campaigns).where(eq(campaigns.id, Number(context.params.id)));
   return NextResponse.json({ message: "Deleted successfully" });
 }

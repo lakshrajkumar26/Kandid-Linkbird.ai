@@ -1,4 +1,4 @@
-
+Deploy - https://kandid-linkbird-ai2.vercel.app/
 Current
 lib/
 ├─ db/

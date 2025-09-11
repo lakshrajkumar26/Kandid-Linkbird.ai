@@ -6,9 +6,10 @@ import { eq } from "drizzle-orm";
 // GET single campaign + stats
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const campaignId = Number(context.params.id);
+  const resolved = await params;
+  const campaignId = Number(resolved.id);
 
   // 1. Campaign info
   const campaign = await db.query.campaigns.findFirst({
@@ -58,8 +59,10 @@ export async function GET(
 // PATCH campaign
 export async function PATCH(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolved = await params;
+  const idNum = Number(resolved.id);
   const data = await req.json();
 
   const updated = await db
@@ -68,7 +71,7 @@ export async function PATCH(
       name: data.name,
       status: data.status,
     })
-    .where(eq(campaigns.id, Number(context.params.id)))
+    .where(eq(campaigns.id, idNum))
     .returning();
 
   return NextResponse.json(updated[0] || null);
@@ -77,8 +80,11 @@ export async function PATCH(
 // DELETE campaign
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  await db.delete(campaigns).where(eq(campaigns.id, Number(context.params.id)));
+  const resolved = await params;
+  const idNum = Number(resolved.id);
+
+  await db.delete(campaigns).where(eq(campaigns.id, idNum));
   return NextResponse.json({ message: "Deleted successfully" });
 }

@@ -1,143 +1,105 @@
-Deploy - https://kandid-linkbird-ai2.vercel.app/
-Current
-lib/
-├─ db/
-│  ├─ index.ts           # Drizzle connection
-│  └─ schema.ts          # Table definitions (Leads, Campaigns)
-├─ auth/
-│  ├─ betterAuth.ts      # Better Auth setup
-│  └─ middleware.ts      # Protected route middleware
-services/
-├─ leadsService.ts       # CRUD operations for leads
-├─ campaignsService.ts   # CRUD operations for campaigns
-pages/api/ (optional legacy) OR app/api/
-├─ leads/
-│  └─ route.ts           # Handles HTTP methods
-├─ campaigns/
-│  └─ route.ts
+LeadManager
+
+LeadManager is a modern Campaign & Lead Management System designed to help businesses organize leads, track campaigns, and monitor progress easily.
+
+Features
+
+Campaign Management: Create, edit, and delete campaigns.
+
+Lead Tracking: Manage leads per campaign and track their status (pending, sent, replied).
+
+Analytics Dashboard: View campaign statistics including acceptance and reply rates.
+
+Tech Stack
+
+Frontend: Next.js 15 (App Router)
+
+Backend: TypeScript for type safety
+
+Database: PostgreSQL or MySQL with Drizzle ORM for database queries
+
+Styling: Tailwind CSS for styling
+
+Deployment: Vercel for seamless deployment
+
+Prerequisites
+
+Before setting up the project, ensure you have the following installed:
+
+Node.js (v18 or higher)
+
+npm or yarn
+
+PostgreSQL or MySQL database
+
+Setup Instructions
+1. Clone the Repository
+git clone https://github.com/yourusername/leadmanager.git
+cd leadmanager
+
+2. Install Dependencies
+npm install
+# or
+yarn install
+
+3. Configure Environment Variables
+
+Create a .env.local file in the root directory and add the following environment variables:
+
+DATABASE_URL=postgresql://user:password@localhost:5432/leadmanager
+NEXT_PUBLIC_VERCEL_URL=your-vercel-url
 
 
-High-level plan (what to implement next) 
+Replace user, password, and localhost:5432/leadmanager with your actual database credentials and URL.
 
-Better Auth: sign-up/sign-in page + Google OAuth + server auth adapter (Drizzle/PG) + logout + protected route middleware.
+4. Run Migrations
 
-DB (Drizzle + Postgres): create campaigns and leads schemas + migration. Add useful indices.
+Ensure your database schema is up to date by running the necessary migrations. If you're using Drizzle ORM, follow the migration steps outlined in the Drizzle documentation
+.
 
-State: Zustand store for sidebar collapse, selected lead/campaign, filters & UI state.
-
-Data fetching: TanStack Query (React Query) for campaigns & leads; use useInfiniteQuery for leads.
-
-UI components: Lead table (infinite scrolling), lead detail side-sheet (shadcn Sheet/Dialog), Campaigns table, search/filters, skeletons & loading states.
-
-Protected routes: Next.js middleware + server session checks.
-
-Polish: accessible keyboard handlers (Esc to close side-sheet), performance hooks, add sorting/filtering and optimistic updates.
+5. Start the Development Server
+npm run dev
+# or
+yarn dev
 
 
+Visit http://localhost:3000 in your browser to view the application.
 
+Deployment on Vercel
 
+To deploy LeadManager on Vercel:
 
+Push your code to a Git repository (GitHub, GitLab, or Bitbucket).
 
+Go to Vercel
+ and log in or sign up.
 
+Click on "New Project" and import your repository.
 
+Vercel will automatically detect the Next.js framework and configure the deployment settings.
 
+Set the environment variables in the Vercel dashboard:
 
-# API Routes & Controllers Overview
+DATABASE_URL: Your production database connection string.
 
-This document describes the API routes and their corresponding controllers for the Kandid Full Stack Assignment (Next.js App Router).
+NEXT_PUBLIC_VERCEL_URL: Your Vercel project URL.
 
----
+Click "Deploy" and wait for the process to complete.
 
-## 1. Authentication Routes
+Once deployed, your application will be live on Vercel's domain.
 
-Using **Better Auth**, most routes are handled automatically, but you will need:
+Contributing
 
-- `/api/auth/[...betterauth]/route.ts` → Main Better Auth handler
-- `/api/auth/register` → Custom registration (manual email/password signup)
-- **(Optional)** `/api/auth/logout` → To handle custom logout if needed
+We welcome contributions to LeadManager! To contribute:
 
-### Controllers
-No separate controllers needed; Better Auth handles the logic.
+Fork the repository.
 
----
+Create a new branch (git checkout -b feature/your-feature).
 
-## 2. Campaigns Routes
+Make your changes and commit them (git commit -am 'Add new feature').
 
-- `/api/campaigns`
-  - `GET` → List all campaigns (with filters & sorting)
-  - `POST` → Create new campaign
+Push to your fork (git push origin feature/your-feature).
 
-- `/api/campaigns/[id]`
-  - `GET` → Get a single campaign
-  - `PATCH` → Update campaign (name, status, etc.)
-  - `DELETE` → Delete campaign
+Create a new Pull Request.
 
-### Controllers (`/lib/services/campaignService.ts`)
-- `getCampaigns()`
-- `getCampaignById()`
-- `createCampaign()`
-- `updateCampaign()`
-- `deleteCampaign()`
-
----
-
-## 3. Leads Routes
-
-- `/api/leads`
-  - `GET` → List all leads (with infinite scroll, filters, search)
-  - `POST` → Create new lead
-
-- `/api/leads/[id]`
-  - `GET` → Lead details (for side sheet)
-  - `PATCH` → Update status (Pending → Contacted → Responded → Converted)
-  - `DELETE` → Delete lead
-
-### Controllers (`/lib/services/leadService.ts`)
-- `getLeads()`
-- `getLeadById()`
-- `createLead()`
-- `updateLead()`
-- `deleteLead()`
-
----
-
-## 4. Optional: Settings or User Profile
-
-- `/api/user` → Fetch current user
-- `/api/user/update` → Update profile
-
----
-
-## Total API Routes (Backend)
-
-- **Authentication**: ~2–3 routes (Better Auth + register)
-- **Campaigns**: 2 main routes (`/campaigns`, `/campaigns/[id]`)
-- **Leads**: 2 main routes (`/leads`, `/leads/[id]`)
-- **(Optional)** User routes: 1–2
-
-**Total: ~6–7 routes (all in `/app/api/`).**
-
----
-
-## Controller Layer Best Practices
-
-Next.js App Router does not enforce a strict controller structure like Express.
-
-- Keep routes in `/app/api/.../route.ts` (handle `GET`, `POST`, `PATCH`, `DELETE`).
-- Place reusable logic in `/lib/services/`.
-
-Example:
-```
-src/
-  lib/
-    services/
-      campaignService.ts
-      leadService.ts
-      authService.ts
-```
-
-
-
-
-
-
+License
